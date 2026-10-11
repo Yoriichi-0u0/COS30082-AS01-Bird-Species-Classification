@@ -1,0 +1,3 @@
+# Community Cloud recognizes this filename at the staged repository root.
+# Reuse the reviewed dependency closure, including exact TensorFlow/Keras pins.
+-r requirements-inference.lock.txt
