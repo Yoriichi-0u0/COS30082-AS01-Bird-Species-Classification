@@ -1,0 +1,23 @@
+{
+  "model": "ConvNeXtBase 320",
+  "model_sha256": "3c8d85465b3f0ae0732b4659e08f86caa7bae80dd1f39e1edfe3f8a0ef3ba0d5",
+  "role": "saved aggregate results only; no dataset reader or evaluation",
+  "results": [
+    {
+      "partition": "Internal validation",
+      "images": 959,
+      "top1": 0.9249217935349322,
+      "average_class_accuracy": 0.9234166666666667,
+      "top5": 0.9916579770594369,
+      "common_unsmoothed_crossentropy": 0.3327893912792206
+    },
+    {
+      "partition": "Official test",
+      "images": 1204,
+      "top1": 0.9269102990033222,
+      "average_class_accuracy": 0.925625,
+      "top5": 0.9908637873754153,
+      "common_unsmoothed_crossentropy": 0.3419765359807231
+    }
+  ]
+}

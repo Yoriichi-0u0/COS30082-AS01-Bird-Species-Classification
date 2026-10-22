@@ -1,57 +1,48 @@
-# COS30082 AS01 Multi-Class Classification
+# Bird species classifier — ConvNeXt-Base 320
 
-An educational Streamlit demonstration for classifying 200 bird species. It uses
-one frozen EfficientNetB3 model with 380 x 380 RGB input and CPU float32 inference.
+A public educational Streamlit demonstration for 200 bird species. Upload a JPEG
+or PNG (up to 10 MiB / 20 MP), preview it and obtain Top-1 plus Top-5 species,
+class IDs and softmax confidence. Confidence is not a calibrated guarantee; the
+closed-set classifier also assigns a bird label to unfamiliar or non-bird inputs.
 
-Upload a JPEG or PNG (up to 10 MiB and 20 megapixels), then select **Predict**.
-The application previews the image, shows the Top-1 species and zero-based class
-ID, and ranks the Top-5 species with softmax confidence bars.
+## Exact frozen model
 
-## Local use
+ConvNeXt-Base, seed 42, selected epoch 34, ImageNet-21k then ImageNet-1k pretraining.
+RGB float32 [0,255] is bilinearly resized with aspect-preserving zero padding to
+320 square. Normalization is internal; computation stays mixed_float16, outputs
+float32, inference training=False, single view, no TTA. One CPU model is cached
+per process and predictions are serialized. Uploaded bytes are passed unchanged
+to the shared decoder. No dataset or evaluator is included.
 
-Use Python 3.12 in an isolated environment:
+Model SHA-256: `3c8d85465b3f0ae0732b4659e08f86caa7bae80dd1f39e1edfe3f8a0ef3ba0d5`.
+Mapping SHA-256: `ab490ae3ad95166b904c24b4173c2e018a5c17f9a1f8da87a1c86eb110ffdfa4`.
+The 353,755,501-byte optimizer-free export is tracked with Git LFS, not ordinary
+Git. Clone with Git LFS and run `git lfs pull`; a pointer file cannot be loaded.
+The loader verifies the actual file, mapping and bound source before inference.
+Historical candidate metadata retains its original pending-review wording and
+provenance bytes; that old status is not used to grant evaluation access.
+Public inference is explicitly authorized by the model owner. There is no test
+authorization or official dataset in this deployment.
 
-```bash
-python -m venv .venv
-# Activate the virtual environment using your operating system's normal command.
-python -m pip install -r requirements.txt
-python -m streamlit run app.py
-```
+## Run / host
 
-The model and mapping are included. Training, WSL, CUDA and a GPU are unnecessary.
-All runtime bundle paths are resolved relative to this repository. On Streamlit
-Community Cloud, the entry point is `app.py` and Python 3.12 should be selected.
-This repository does not itself deploy a cloud application.
+Use Linux Python 3.12 with `pip install -r requirements.txt`, then
+`streamlit run app.py`. TensorFlow 2.19.1 and Keras 3.12.0 are pinned. No GPU is
+required. Community Cloud: repository branch `convnext-streamlit`, entrypoint
+`app.py`, Python 3.12, free public hosting. An inactive app can hibernate and take
+time to wake; the first prediction loads the model. No paid service is required.
 
-## Verified results
+## Existing results and limitations
 
-These are saved aggregate results from the completed coursework evaluation;
-running the app does not recompute accuracy or access the official dataset.
+Internal validation: 887/959 = 92.49218% Top-1, 92.34167% mean class accuracy.
+Official test: 1,116/1,204 = 92.69103% Top-1, 92.56250% mean class accuracy,
+99.08638% Top-5. These saved aggregates are not recomputed by the application.
+The prior B3 official score was known before this replacement; repeated validation
+development and one ConvNeXt seed limit the interpretation. Four identical
+cross-split photographs have conflicting supplied labels and were all errors.
+Comparisons with B3 change several factors, not just architecture.
 
-| Evaluation partition | Images | Top-1 | Average class accuracy | Top-5 |
-| --- | ---: | ---: | ---: | ---: |
-| Internal validation | 959 | 80.29% | 79.65% | 93.43% |
-| Official assignment test | 1,204 | 76.41% | 75.85% | 93.69% |
-
-The model is restricted to the 200 supplied species. It will still assign a class
-to other birds or non-bird images. Softmax confidence is not a calibrated
-probability or a guarantee of correctness; poor visibility, backgrounds and
-unfamiliar image conditions can affect predictions. Upload only images you may
-use. Hosted providers may handle network data under their own policies.
-
-## Provenance and usage
-
-This is the seed-42 B3-380 coursework model, fine-tuned from Keras ImageNet weights,
-with single-view deterministic inference. Its ordered mapping and preprocessing
-are verified before loading. No training/test images, per-image official results,
-coursework notebooks or experiment checkpoints are included.
-
-Read [ATTRIBUTION.md](ATTRIBUTION.md) for dataset and pretrained-model provenance,
-upstream notices and the licensing evidence. This is an educational
-demonstration. Upstream EfficientNet components retain their Apache-2.0
-conditions; no blanket third-party image rights are claimed.
-
-The provenance lock includes an historical local checkpoint path, published
-with the author's explicit consent. It is provenance only; model loading uses
-project-relative paths. Streamlit hosting and a Hugging Face landing page are
-separate deployment steps.
+See `ATTRIBUTION.md` and `third_party/` for source and upstream notices. No blanket
+license is invented for third-party images or the student-derived model. Dataset
+images, annotations, training records, evaluation claims and private credentials
+are excluded. Earlier B3 deployment remains on branch `main`.

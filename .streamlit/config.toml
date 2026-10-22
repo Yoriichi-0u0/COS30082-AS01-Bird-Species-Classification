@@ -1,15 +1,11 @@
-# Platform overlay only. The approved local config remains unchanged.
-# Community Cloud manages its own listening address and port.
 [server]
 headless = true
 maxUploadSize = 10
 enableCORS = true
 enableXsrfProtection = true
 fileWatcherType = "none"
-
 [browser]
 gatherUsageStats = false
-
 [theme]
 base = "light"
 primaryColor = "#26734d"

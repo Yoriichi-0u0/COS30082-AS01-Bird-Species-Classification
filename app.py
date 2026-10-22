@@ -1,9 +1,11 @@
-"""Stage 4A local Streamlit demonstration of the approved inference export."""
+"""Public Streamlit demonstration of the frozen ConvNeXt-Base 320 export."""
 import hashlib
 import json
 import os
 from pathlib import Path
 import sys
+import time
+import resource
 
 # Set CPU visibility before the lazy TensorFlow import; no CUDA is required.
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -11,7 +13,8 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
 sys.dont_write_bytecode = True
 
 import streamlit as st
-from src.web_demo import (DemoPredictor, validate_upload, species_display_name,
+from src.gradio_demo import ConvNeXtPredictor
+from src.web_demo import (validate_upload, species_display_name,
                           deny_official_dataset_access)
 
 if not getattr(sys, "as01_demo_guard_installed", False):
@@ -24,7 +27,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 @st.cache_resource(max_entries=1, show_spinner=False)
 def cached_predictor():
     """The single model survives reruns and is shared across browser sessions."""
-    return DemoPredictor(PROJECT_ROOT)
+    predictor = ConvNeXtPredictor(PROJECT_ROOT)
+    print("CONVNEXT_MODEL_LOADED " + json.dumps({
+        "sha256": "3c8d85465b3f0ae0732b4659e08f86caa7bae80dd1f39e1edfe3f8a0ef3ba0d5", "compute_dtype": predictor.model.compute_dtype,
+        "output_dtype": predictor.model.output.dtype, "load_seconds": predictor.load_seconds,
+        "peak_RSS_MiB": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024,
+        "pid": os.getpid()}), flush=True)
+    return predictor
 
 
 def clear_upload():
@@ -36,7 +45,7 @@ def clear_upload():
 
 def show_saved_results():
     """Read a small aggregate snapshot; never open datasets or evaluator modules."""
-    path = PROJECT_ROOT / "demo/verified_results.json"
+    path = PROJECT_ROOT / "demo/convnext_verified_results.json"
     if not path.is_file():
         return
     with st.expander("Verified model results"):
@@ -61,8 +70,8 @@ def main():
     st.write("Upload a bird photograph to explore predictions across 200 species.")
     with st.sidebar:
         st.header("About this model")
-        st.write("**EfficientNetB3 · seed 42**")
-        st.write("380 × 380 RGB input · CPU inference")
+        st.write("**ConvNeXt-Base · seed 42 · epoch 34**")
+        st.write("320 × 320 RGB input · CPU inference")
         st.caption("RGB decoding → padded bilinear resize → CNN → 200 probabilities → Top-5")
         st.caption("Single-view inference. No training augmentation or test-time augmentation.")
         st.divider()
@@ -97,7 +106,13 @@ def main():
     if predict_pressed and upload is not None:
         try:
             with st.spinner("Loading the CPU model and predicting… The first prediction takes longer."):
+                started = time.perf_counter()
                 result = cached_predictor().predict(contents)
+                elapsed = time.perf_counter() - started
+                st.session_state["prediction_seconds"] = elapsed
+                print("CONVNEXT_PREDICTION " + json.dumps({"seconds": elapsed,
+                    "peak_RSS_MiB": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024,
+                    "pid": os.getpid()}), flush=True)
             st.session_state["prediction"] = result
             st.session_state["prediction_digest"] = digest
         except Exception as error:
@@ -115,6 +130,7 @@ def main():
             st.markdown(f'### {species_display_name(best["species"])}')
             st.write(f'Class ID: **{best["class_id"]}**')
             st.metric("Softmax confidence", f'{best["probability"]:.1%}')
+            st.caption(f'CPU prediction: {st.session_state.get("prediction_seconds", 0):.2f} seconds')
             st.subheader("Top-5 species")
             for item in result["top5"]:
                 label = (f'{item["rank"]}. {species_display_name(item["species"])}'
@@ -123,7 +139,7 @@ def main():
             st.caption("Class IDs use the original ordering, from 0 to 199.")
     st.divider()
     show_saved_results()
-    st.caption("COS30082 Applied Machine Learning · local model demonstration")
+    st.caption("COS30082 Applied Machine Learning · ConvNeXt-Base 320 · frozen model")
 
 
 if __name__ == "__main__":

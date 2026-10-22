@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "status": "pending_external_review",
+  "created_utc": "2026-10-15T09:26:26.240643+00:00",
+  "model": {
+    "architecture": "ConvNeXtBase",
+    "seed": 42,
+    "classes": 200,
+    "parameters": 88193864
+  },
+  "source": {
+    "original_path": "/home/user1/cos30082/as01/runs/iteration_06_20261014T141527_149836Z_full/experiments/base_full_320/best.keras",
+    "run_id": "iteration_06_20261014T141527_149836Z_full",
+    "sha256": "4217ab86d04f9b1fb84927b28192103d0cd8c3a89d7e91ab3fca1f526c730e9b",
+    "bytes": 1765368530
+  },
+  "export": {
+    "path": "models/final_convnext_base_320.keras",
+    "bytes": 353755501,
+    "sha256": "3c8d85465b3f0ae0732b4659e08f86caa7bae80dd1f39e1edfe3f8a0ef3ba0d5",
+    "optimizer_state": false
+  },
+  "learned_weight_sha256": "8c5c01b220163482e9d813a0f0692e7eb13b4e7cc6e3f6a1bc1fc6ade8b901a8",
+  "class_mapping": {
+    "path": "models/class_mapping.json",
+    "sha256": "ab490ae3ad95166b904c24b4173c2e018a5c17f9a1f8da87a1c86eb110ffdfa4"
+  },
+  "split": {
+    "sha256": "65c456049b19bc87173d0e9072cc7d8f3a20366a4d3e8ac0fd0ab7c3e4f358cd",
+    "training_images": 3870,
+    "validation_images": 959
+  },
+  "input": {
+    "shape": [
+      320,
+      320,
+      3
+    ],
+    "dtype": "float32",
+    "pixel_range": [
+      0,
+      255
+    ],
+    "color": "RGB",
+    "resize": "resize_with_pad",
+    "method": "bilinear",
+    "padding_value": 0,
+    "normalization": "inside saved backbone"
+  },
+  "inference": {
+    "protocol": "single",
+    "training": false,
+    "augmentation": false,
+    "tta": false,
+    "compute_policy": "mixed_float16",
+    "output_dtype": "float32",
+    "gpu_batch": 8,
+    "pad_last_batch": true
+  },
+  "feature_contract": "native GAP before pretrained LayerNorm; pooling=avg",
+  "compatibility": {
+    "tensorflow": "2.19.1",
+    "keras": "3.12.0"
+  },
+  "training": {
+    "seed": 42,
+    "augmentation": {
+      "horizontal_flip": true,
+      "rotation": 0.04,
+      "zoom": 0.1
+    },
+    "checkpoint": "val_top1/max",
+    "early_stopping": "val_loss/patience7",
+    "reduce_lr": "val_loss/patience3/factor0.5",
+    "final_test": false,
+    "stage": "base_full_320",
+    "architecture": "convnext_base",
+    "resolution": 320,
+    "depth": "full",
+    "optimizer": "AdamW",
+    "learning_rate": 1e-05,
+    "weight_decay": 0.005,
+    "dropout": 0.5,
+    "smoothing": 0.1,
+    "epochs": 60,
+    "precision": "mixed_float16",
+    "backbone_mode": "follow_training",
+    "batch": 8,
+    "parent": "base_head_224",
+    "stochastic_depth_max": 0.2,
+    "head_hidden_units": 512,
+    "parameters": 88193864,
+    "trainable_parameters": 88193864,
+    "non_trainable_parameters": 0,
+    "maximum_epochs": 60,
+    "parent_checkpoint_sha256": "74180d06907fc953aa9b6575ccf6825d0db1bebdd2aabb776017bed2d8531f5e",
+    "initial_weights_sha256": "a0ef4610152091f4b4e37e22e3f6734aa8e8e09668656974d2adbb152657c352",
+    "split_sha256": "65c456049b19bc87173d0e9072cc7d8f3a20366a4d3e8ac0fd0ab7c3e4f358cd",
+    "inference_mode": "training=False",
+    "actual_convolution_dtype": "float16",
+    "pretrained_feature_contract": "native GAP before pretrained LayerNorm; pooling=avg",
+    "weight_decay_exclusions": [
+      "bias",
+      "gamma",
+      "beta",
+      "variable"
+    ],
+    "image_size": [
+      320,
+      320
+    ],
+    "rgb_range": [
+      0,
+      255
+    ],
+    "resize": "bilinear resize_with_pad",
+    "class_mapping": "../../class_names.json"
+  },
+  "validation_evidence": {
+    "top1": 0.9249217935349322,
+    "correct_images": 887,
+    "images": 959,
+    "average_class_accuracy": 0.9234166666666667,
+    "top5": 0.9916579770594369,
+    "common_validation_crossentropy": 0.3327893912792206,
+    "mean_correct_confidence": 0.8877057433128357,
+    "mean_incorrect_confidence": 0.5265687108039856,
+    "wrong_at_80": 15,
+    "wrong_at_90": 5,
+    "seed": 42,
+    "augmentation": {
+      "horizontal_flip": true,
+      "rotation": 0.04,
+      "zoom": 0.1
+    },
+    "checkpoint": "val_top1/max",
+    "early_stopping": "val_loss/patience7",
+    "reduce_lr": "val_loss/patience3/factor0.5",
+    "final_test": false,
+    "stage": "base_full_320",
+    "architecture": "convnext_base",
+    "resolution": 320,
+    "depth": "full",
+    "optimizer": "AdamW",
+    "learning_rate": 1e-05,
+    "weight_decay": 0.005,
+    "dropout": 0.5,
+    "smoothing": 0.1,
+    "epochs": 60,
+    "precision": "mixed_float16",
+    "backbone_mode": "follow_training",
+    "batch": 8,
+    "parent": "base_head_224",
+    "stochastic_depth_max": 0.2,
+    "head_hidden_units": 512,
+    "parameters": 88193864,
+    "trainable_parameters": 88193864,
+    "non_trainable_parameters": 0,
+    "maximum_epochs": 60,
+    "parent_checkpoint_sha256": "74180d06907fc953aa9b6575ccf6825d0db1bebdd2aabb776017bed2d8531f5e",
+    "initial_weights_sha256": "a0ef4610152091f4b4e37e22e3f6734aa8e8e09668656974d2adbb152657c352",
+    "split_sha256": "65c456049b19bc87173d0e9072cc7d8f3a20366a4d3e8ac0fd0ab7c3e4f358cd",
+    "inference_mode": "training=False",
+    "actual_convolution_dtype": "float16",
+    "pretrained_feature_contract": "native GAP before pretrained LayerNorm; pooling=avg",
+    "weight_decay_exclusions": [
+      "bias",
+      "gamma",
+      "beta",
+      "variable"
+    ],
+    "evaluation_batch": 8,
+    "evaluation_forward": "one compiled deterministic forward; pad/discard final batch",
+    "training_seconds": 16216.052415413,
+    "training_seconds_exact": true,
+    "epochs_completed": 38,
+    "checkpoint_sha256": "4217ab86d04f9b1fb84927b28192103d0cd8c3a89d7e91ab3fca1f526c730e9b",
+    "frozen_weights_unchanged": true,
+    "selected_weights_updated": true,
+    "classifier_updated": true,
+    "training_complete": true,
+    "evaluation_seconds": 94.02983794300235,
+    "evaluation_memory_samples": [
+      {
+        "gpu_total_mib": 8188.0,
+        "gpu_used_mib": 888.0,
+        "gpu_available_mib": 7300.0
+      },
+      {
+        "gpu_total_mib": 8188.0,
+        "gpu_used_mib": 1418.0,
+        "gpu_available_mib": 6770.0
+      },
+      {
+        "gpu_total_mib": 8188.0,
+        "gpu_used_mib": 1418.0,
+        "gpu_available_mib": 6770.0
+      }
+    ],
+    "best_epoch": 34,
+    "deterministic_training_top1": 0.999483204134367,
+    "deterministic_gap": 0.07456141059943477,
+    "validation_loss": 1.2023866176605225,
+    "diagnostic_only": false,
+    "live_checkpoint_weights_exact": true,
+    "live_checkpoint_prediction_parity": true
+  },
+  "pretraining": {
+    "source": "Keras ConvNeXtBase imagenet weights",
+    "sequence": [
+      "ImageNet-21k",
+      "ImageNet-1k"
+    ],
+    "cached_weights_sha256": "40a20c5548a5e9202f69735ecc06c990e6b7c9d2de39f0361e27baeb24cb7c45",
+    "primary_reference": "https://github.com/keras-team/keras/blob/v3.12.0/keras/src/applications/convnext.py"
+  },
+  "bound_files": {
+    "finalization/convnext_base_320/candidate.py": "756bda6b002c74b7e61d1cdb3ec752641c1a158710e7c7125dc086e81ae4104b",
+    "src/__init__.py": "c04a6341fe7e97e382aaaf5e9bcc5a0c482314d8c946532dbb69470881f54eae",
+    "src/final_bundle.py": "027369a793e5a617477256b8b21321eaf99996b94b548687ce4d786fd87df483",
+    "src/inference.py": "d2f99be49ba613f2dbcb34e8e8ef7b0f75ef617d6cc3a980ed08a987bb0485ba",
+    "src/local_validator.py": "978a1479dca6330312fbf518041df31360986dc101a19cdc6a37269809208500",
+    "src/modeling.py": "d795110b275bb75869b86918cf19104eeba20a3b0cc4f47df0f6265c6f368e60"
+  },
+  "limitations": [
+    "Pending inspection does not grant model approval or test access.",
+    "Repeated development validation and one ConvNeXt seed; not blind-test performance.",
+    "Prior B3 official evaluation remains disclosed and its consumed claims are unchanged.",
+    "Cloud memory fit and weight redistribution need separate review."
+  ]
+}
